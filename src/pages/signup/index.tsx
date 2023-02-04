@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './signup.css';
+
+interface responseType {
+  statusCode: number;
+  message: string;
+  error: string;
+  access_token: string;
+}
 
 const SIGNUP_URL = 'https://pre-onboarding-selection-task.shop/auth/signup';
 // const EMAIL_REGEX = /^[A-Za-z0-9]+@[A-Za-z]+\.+[A-Za-z]{2,3}$/;
@@ -16,6 +24,7 @@ function Signup() {
   const [userInfo, setUserInfo] = useState({ email: '', password: '' });
   const [emailConfirm, setEmailConfirm] = useState(true);
   const [passwordConfirm, setPasswordConfirm] = useState(true);
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -30,6 +39,7 @@ function Signup() {
   };
 
   const postData = async () => {
+    let result = { statusCode: 0, message: '', error: '', access_token: '' };
     try {
       const response = await fetch(SIGNUP_URL, {
         method: 'POST',
@@ -39,11 +49,13 @@ function Signup() {
         body: JSON.stringify(userInfo),
       });
       const res = await response.json();
-      console.log(res);
+      result = { ...result, ...res };
     } catch (error) {
       console.log(error);
     }
+    return result;
   };
+
   const emailCheck = (value: string) => {
     if (value.indexOf(COMPARE_AT) === NOT_INCLUDE_INDEX) {
       setEmailConfirm(true);
@@ -60,18 +72,27 @@ function Signup() {
     setPasswordConfirm(false);
   };
 
+  const checkRedirection = (result: responseType) => {
+    if (result.access_token.length) {
+      navigate('/signin');
+      return;
+    }
+    alert(result.message);
+  };
+
   const handleClick = async () => {
-    await postData();
+    const result = await postData();
+    checkRedirection(result);
+    console.log(result);
   };
 
   return (
     <div className="login-layout">
-      <h2>{SIGNUP_TITLE}</h2>
       <section className="login-container">
         <h4>{EMAIL_TITLE}</h4>
         <span className="mention">{NOT_INCLUDE_AT_MESSAGE}</span>
         <input
-          className="login-input"
+          className="signup-input"
           value={userInfo.email}
           data-testid="email-input"
           onChange={handleEmailChange}
@@ -79,14 +100,14 @@ function Signup() {
         <h4>{PASSWORD_TITLD}</h4>
         <div className="mention">{DIGIT_CONDITION_MESSAGE}</div>
         <input
-          className="login-input"
+          className="signup-input"
           value={userInfo.password}
           data-testid="password-input"
           onChange={handlePasswordChange}
         />
         <button
           type="submit"
-          className="login-input"
+          className="signup-button"
           onClick={handleClick}
           disabled={emailConfirm || passwordConfirm}
         >

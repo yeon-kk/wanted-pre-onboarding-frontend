@@ -11,7 +11,7 @@
   width: 400px;
 }
 
-.login-input {
+.signup-input {
   padding: 12px 16px 12px;
   border: 1px solid #dadada;
   border-radius: 6px;
@@ -21,4 +21,11 @@
 .mention {
   color: blue;
   font-size: 8px;
+}
+
+.signup-button {
+  padding: 12px 16px 12px;
+  border: 1px solid #dadada;
+  border-radius: 6px;
+  height: 48px;
 }

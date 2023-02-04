@@ -1,0 +1,25 @@
+ul {
+  list-style: none;
+  padding-left: 0px;
+}
+.main-button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.main-button {
+  width: 200px;
+  height: 40px;
+  background-color: white;
+  border: none;
+}
+.main-button:hover {
+  background-color: #fff94b;
+  transition: 0.7s;
+  cursor: pointer;
+}
+
+.clicked {
+  background-color: #fff94b;
+  cursor: pointer;
+}

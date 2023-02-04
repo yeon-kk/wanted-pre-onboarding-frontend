@@ -1,0 +1,20 @@
+.login-layout {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    align-items: center;
+  }
+  
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+  }
+  
+  .login-input {
+    padding: 12px 16px 12px;
+    border: 1px solid #dadada;
+    border-radius: 6px;
+    height: 48px;
+  }
+  

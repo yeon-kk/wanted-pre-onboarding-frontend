@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import './signin.css';
+
+interface responseType {
+  statusCode: number;
+  message: string;
+  error: string;
+  access_token: string;
+}
 
 const SIGNIN_URL = 'https://pre-onboarding-selection-task.shop/auth/signin';
 const PASSWORD_MIN_LENGTH = 8;
@@ -15,6 +24,8 @@ function Signin() {
   const [userInfo, setUserInfo] = useState({ email: '', password: '' });
   const [emailConfirm, setEmailConfirm] = useState(true);
   const [passwordConfirm, setPasswordConfirm] = useState(true);
+  const navigate = useNavigate();
+  const localStorage = window.localStorage;
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -29,6 +40,7 @@ function Signin() {
   };
 
   const postData = async () => {
+    let result = { statusCode: 0, message: '', error: '', access_token: '' };
     try {
       const response = await fetch(SIGNIN_URL, {
         method: 'POST',
@@ -38,10 +50,11 @@ function Signin() {
         body: JSON.stringify(userInfo),
       });
       const res = await response.json();
-      console.log(res);
+      result = { ...result, ...res };
     } catch (error) {
       console.log(error);
     }
+    return result;
   };
   const emailCheck = (value: string) => {
     if (value.indexOf(COMPARE_AT) === NOT_INCLUDE_INDEX) {
@@ -59,13 +72,23 @@ function Signin() {
     setPasswordConfirm(false);
   };
 
+  const checkRedirection = (result: responseType) => {
+    if (result.access_token.length) {
+      navigate('/todo');
+      return true;
+    }
+    alert(result.message);
+    return false;
+  };
+
   const handleClick = async () => {
-    await postData();
+    const result = await postData();
+    const access_token = checkRedirection(result) ? result.access_token : '';
+    localStorage.setItem('userInfo', access_token);
   };
 
   return (
     <div className="login-layout">
-      <h2>{SIGNIN_TITLE}</h2>
       <section className="login-container">
         <h4>{EMAIL_TITLE}</h4>
         <span className="mention">{NOT_INCLUDE_AT_MESSAGE}</span>
@@ -85,7 +108,7 @@ function Signin() {
         />
         <button
           type="submit"
-          className="login-input"
+          className="login-button"
           onClick={handleClick}
           disabled={emailConfirm || passwordConfirm}
         >

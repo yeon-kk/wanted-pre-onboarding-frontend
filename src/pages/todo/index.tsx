@@ -20,6 +20,12 @@ function Todo() {
     setTodoList([...tmpList]);
   };
 
+  const handleDeleteClick = (index: number) => () => {
+    const tmpList = [...todoList];
+    tmpList.splice(index, 1);
+    setTodoList([...tmpList]);
+  };
+
   return (
     <div className="login-layout">
       <h4>{TODO_TITLE}</h4>
@@ -39,7 +45,7 @@ function Todo() {
         </button>
       </div>
       <ol>
-        {todoList.map((value) => (
+        {todoList.map((value, index) => (
           <li>
             <label>
               <input type="checkbox" />
@@ -48,7 +54,11 @@ function Todo() {
             <button type="button" data-testid="modify-button">
               {MODIFY_LABEL}
             </button>
-            <button type="button" data-testid="delete-button">
+            <button
+              type="button"
+              data-testid="delete-button"
+              onClick={handleDeleteClick(index)}
+            >
               {DELETE_LABEL}
             </button>
           </li>

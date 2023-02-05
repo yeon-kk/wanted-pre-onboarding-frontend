@@ -7,7 +7,7 @@ const MODIFY_LABEL = '수정';
 const DELETE_LABEL = '삭제';
 const SUBMIT_TEXT = '제출';
 const CANCEL_TEXT = '취소';
-const GET_TODOLIST_URL = 'https://pre-onboarding-selection-task.shop/todos';
+const TODOLIST_URL = 'https://pre-onboarding-selection-task.shop/todos';
 
 interface todoType {
   id: number;
@@ -20,8 +20,42 @@ function Todo() {
   const [todoList, setTodoList] = useState<todoType[]>([]);
   const [createTodo, setCreateTodo] = useState('');
   const [modifyTodo, setModifyTodo] = useState<string>('');
-  const [modifyList, setModifyList] = useState<boolean[]>();
+  const [modifyList, setModifyList] = useState<boolean[]>([]);
   const localStorage = window.localStorage;
+
+  const getTodos = async () => {
+    try {
+      const response = await fetch(TODOLIST_URL, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('userInfo')}`,
+        },
+      });
+      return await response.json();
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  };
+
+  const postCreateTodo = async (data = {}) => {
+    try {
+      const response = await fetch(TODOLIST_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('userInfo')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  };
 
   const handleCreateTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCreateTodo(e.currentTarget.value);
@@ -39,7 +73,11 @@ function Todo() {
       isCompleted: false,
       userId: 1,
     });
+    const tmpModify = [...modifyList];
+    tmpModify.push(false);
+    setModifyList([...tmpModify]);
     setTodoList([...tmpList]);
+    postCreateTodo({ todo: createTodo });
     setCreateTodo('');
   };
 
@@ -50,15 +88,14 @@ function Todo() {
   };
 
   const handleModifyClick = (todo: string, index: number) => () => {
-    if (modifyList) {
-      const tmpModify = [...modifyList];
-      tmpModify[index] = true;
-      setModifyList([...tmpModify]);
-    }
+    const tmpModify = [...modifyList];
+    tmpModify[index] = true;
+    setModifyList([...tmpModify]);
     setModifyTodo(todo);
   };
 
   const handleModifySbumitClick = (index: number, todo: string) => () => {
+    console.log('결과', todoList, modifyList);
     const tmpList = [...todoList];
     const modified = {
       ...tmpList[index],
@@ -67,11 +104,9 @@ function Todo() {
     };
     tmpList.splice(index, 1, modified);
     setTodoList([...tmpList]);
-    if (modifyList) {
-      const tmpModify = [...modifyList];
-      tmpModify[index] = false;
-      setModifyList([...tmpModify]);
-    }
+    const tmpModify = [...modifyList];
+    tmpModify[index] = false;
+    setModifyList([...tmpModify]);
     setModifyTodo('');
   };
 
@@ -84,23 +119,8 @@ function Todo() {
     setModifyTodo('');
   };
 
-  const GetTodos = async () => {
-    try {
-      const response = await fetch(GET_TODOLIST_URL, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('userInfo')}`,
-        },
-      });
-      return await response.json();
-    } catch (error) {
-      console.log(error);
-    }
-    return;
-  };
-
   const initTodos = async () => {
-    const todos = await GetTodos();
+    const todos = await getTodos();
     setTodoList([...todos]);
     const arr = todos.map(() => false);
     setModifyList([...arr]);

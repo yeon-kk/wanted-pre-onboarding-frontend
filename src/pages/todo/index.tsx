@@ -3,6 +3,8 @@ import './todo.css';
 
 const TODO_TITLE = 'TODO LIST';
 const ADD_LABEL = '추가';
+const MODIFY_LABEL = '수정';
+const DELETE_LABEL = '삭제';
 
 function Todo() {
   const [todoList, setTodoList] = useState<string[]>([]);
@@ -39,8 +41,16 @@ function Todo() {
       <ol>
         {todoList.map((value) => (
           <li>
-            <input type="checkbox" />
-            {value}
+            <label>
+              <input type="checkbox" />
+              <span>{value}</span>
+            </label>
+            <button type="button" data-testid="modify-button">
+              {MODIFY_LABEL}
+            </button>
+            <button type="button" data-testid="delete-button">
+              {DELETE_LABEL}
+            </button>
           </li>
         ))}
       </ol>

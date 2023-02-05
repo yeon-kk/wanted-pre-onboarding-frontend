@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Signin from './pages/signin';
-import Signup from './pages/signup';
-import Todo from './pages/todo';
+import TodoList from './pages/todolist';
+import Home from './pages/home';
+import Login from './pages/login';
+import Join from './pages/join';
+import App from './App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,10 +16,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/todo" element={<Todo />} />
+        <Route path="/app" element={<App />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<Login />} />
+        <Route path="/signup" element={<Join />} />
+        <Route path="/todo" element={<TodoList />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

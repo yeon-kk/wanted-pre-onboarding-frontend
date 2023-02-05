@@ -33,6 +33,8 @@ function Join() {
       navigate(ROUTE_TODO);
       return;
     }
+    navigate(ROUTE_SIGNIN);
+    return;
   };
 
   return (

@@ -108,6 +108,7 @@ function Signup() {
           type="submit"
           className="signup-button"
           onClick={handleClick}
+          data-testid="signup-button"
           disabled={emailConfirm || passwordConfirm}
         >
           {SIGNUP_TITLE}

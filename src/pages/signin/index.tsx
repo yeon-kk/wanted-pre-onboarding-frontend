@@ -110,6 +110,7 @@ function Signin() {
           type="submit"
           className="login-button"
           onClick={handleClick}
+          data-testid="signin-button"
           disabled={emailConfirm || passwordConfirm}
         >
           {SIGNIN_TITLE}

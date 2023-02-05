@@ -57,6 +57,25 @@ function Todo() {
     return;
   };
 
+  const putUpdateTodo = async (id: number, data = {}) => {
+    try {
+      const response = await fetch(`${TODOLIST_URL}/${id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('userInfo')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  };
+
   const handleCreateTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCreateTodo(e.currentTarget.value);
   };
@@ -94,21 +113,22 @@ function Todo() {
     setModifyTodo(todo);
   };
 
-  const handleModifySbumitClick = (index: number, todo: string) => () => {
-    console.log('결과', todoList, modifyList);
-    const tmpList = [...todoList];
-    const modified = {
-      ...tmpList[index],
-      todo,
-      isCompleted: true, //수정
+  const handleModifySbumitClick =
+    (index: number, todo: string, isCompleted: boolean) => () => {
+      const tmpList = [...todoList];
+      const modified = {
+        ...tmpList[index],
+        todo,
+        isCompleted,
+      };
+      tmpList.splice(index, 1, modified);
+      setTodoList([...tmpList]);
+      const tmpModify = [...modifyList];
+      tmpModify[index] = false;
+      setModifyList([...tmpModify]);
+      setModifyTodo('');
+      putUpdateTodo(modified.id, { todo, isCompleted });
     };
-    tmpList.splice(index, 1, modified);
-    setTodoList([...tmpList]);
-    const tmpModify = [...modifyList];
-    tmpModify[index] = false;
-    setModifyList([...tmpModify]);
-    setModifyTodo('');
-  };
 
   const handleCancleClick = (index: number) => () => {
     if (modifyList) {
@@ -164,7 +184,7 @@ function Todo() {
                   <button
                     type="button"
                     className="todo-button"
-                    onClick={handleModifySbumitClick(index, modifyTodo)}
+                    onClick={handleModifySbumitClick(index, modifyTodo, true)}
                   >
                     {SUBMIT_TEXT}
                   </button>

@@ -1,3 +1,52 @@
 .login-layout {
   width: 400px;
 }
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+}
+
+.todo-input {
+  width: 200px;
+  border: 1px solid #dadada;
+}
+
+.todo-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.todo-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.todo-label {
+  display: flex;
+  flex-direction: row;
+}
+
+.todo-content {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  word-break: break-all;
+  border-top: 1px solid #dadada;
+}
+
+.todo-button-container {
+  display: flex;
+  gap: 4px;
+}
+
+.todo-button {
+  height: 40px;
+  background-color: white;
+}
+
+.todo-button:hover {
+  cursor: pointer;
+}

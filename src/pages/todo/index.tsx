@@ -38,7 +38,10 @@ function Todo() {
       </div>
       <ol>
         {todoList.map((value) => (
-          <li>{value}</li>
+          <li>
+            <input type="checkbox" />
+            {value}
+          </li>
         ))}
       </ol>
     </div>

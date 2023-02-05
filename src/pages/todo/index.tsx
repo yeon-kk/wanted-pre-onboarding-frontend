@@ -148,12 +148,24 @@ function Todo() {
     };
 
   const handleCancleClick = (index: number) => () => {
-    if (modifyList) {
-      const tmpModify = [...modifyList];
-      tmpModify[index] = true;
-      setModifyList([...tmpModify]);
-    }
+    const tmpModify = [...modifyList];
+    tmpModify[index] = false;
+    setModifyList([...tmpModify]);
     setModifyTodo('');
+  };
+
+  const handleCompletedChange = (isCompleted: boolean, index: number) => () => {
+    const tmpList = [...todoList];
+    const modified = {
+      ...tmpList[index],
+      isCompleted: !isCompleted,
+    };
+    tmpList.splice(index, 1, modified);
+    setTodoList([...tmpList]);
+    putUpdateTodo(modified.id, {
+      todo: modified.todo,
+      isCompleted: modified.isCompleted,
+    });
   };
 
   const initTodos = async () => {
@@ -187,9 +199,13 @@ function Todo() {
         </button>
       </div>
       <ol className="todo-list-container">
-        {todoList.map(({ todo }, index) => (
+        {todoList.map(({ todo, isCompleted }, index) => (
           <li className="todo-container">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              checked={isCompleted}
+              onChange={handleCompletedChange(isCompleted, index)}
+            />
             {modifyList && modifyList[index] ? (
               <label className="todo-label">
                 <input
@@ -201,7 +217,11 @@ function Todo() {
                   <button
                     type="button"
                     className="todo-button"
-                    onClick={handleModifySbumitClick(index, modifyTodo, true)}
+                    onClick={handleModifySbumitClick(
+                      index,
+                      modifyTodo,
+                      isCompleted
+                    )}
                   >
                     {SUBMIT_TEXT}
                   </button>

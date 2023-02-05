@@ -198,23 +198,27 @@ function Todo() {
       </div>
       <ol className="todo-list-container">
         {todoList.map(({ todo, isCompleted }, index) => (
-          <li className="todo-container">
-            <input
-              type="checkbox"
-              checked={isCompleted}
-              onChange={handleCompletedChange(isCompleted, index)}
-            />
+          <>
             {modifyList && modifyList[index] ? (
-              <label className="todo-label">
-                <input
-                  className="todo-input"
-                  value={modifyTodo}
-                  onChange={handleModifyTodoChange}
-                ></input>
+              <li className="todo-container">
+                <label className="todo-label">
+                  <input
+                    type="checkbox"
+                    checked={isCompleted}
+                    onChange={handleCompletedChange(isCompleted, index)}
+                  />
+                  <input
+                    className="todo-input"
+                    data-testid="modify-input"
+                    value={modifyTodo}
+                    onChange={handleModifyTodoChange}
+                  ></input>
+                </label>
                 <div className="todo-button-container">
                   <button
                     type="button"
                     className="todo-button"
+                    data-testid="submit-button"
                     onClick={handleModifySbumitClick(
                       index,
                       modifyTodo,
@@ -231,31 +235,36 @@ function Todo() {
                     {CANCEL_TEXT}
                   </button>
                 </div>
-              </label>
+              </li>
             ) : (
-              <label className="todo-label">
-                <div className="todo-content">{todo}</div>
-                <div className="todo-button-container">
-                  <button
-                    className="todo-button"
-                    type="button"
-                    data-testid="modify-button"
-                    onClick={handleModifyClick(todo, index)}
-                  >
-                    {MODIFY_LABEL}
-                  </button>
-                  <button
-                    className="todo-button"
-                    type="button"
-                    data-testid="delete-button"
-                    onClick={handleDeleteClick(index)}
-                  >
-                    {DELETE_LABEL}
-                  </button>
-                </div>
-              </label>
+              <li className="todo-container">
+                <label className="todo-label">
+                  <input
+                    type="checkbox"
+                    checked={isCompleted}
+                    onChange={handleCompletedChange(isCompleted, index)}
+                  />
+                  <span className="todo-content">{todo}</span>
+                </label>
+                <button
+                  className="todo-button"
+                  type="button"
+                  data-testid="modify-button"
+                  onClick={handleModifyClick(todo, index)}
+                >
+                  {MODIFY_LABEL}
+                </button>
+                <button
+                  className="todo-button"
+                  type="button"
+                  data-testid="delete-button"
+                  onClick={handleDeleteClick(index)}
+                >
+                  {DELETE_LABEL}
+                </button>
+              </li>
             )}
-          </li>
+          </>
         ))}
       </ol>
     </div>

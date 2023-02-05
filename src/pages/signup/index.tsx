@@ -83,7 +83,6 @@ function Signup() {
   const handleClick = async () => {
     const result = await postData();
     checkRedirection(result);
-    console.log(result);
   };
 
   return (

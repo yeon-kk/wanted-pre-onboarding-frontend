@@ -1,0 +1,18 @@
+.todolist-layout {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  align-items: end;
+}
+
+.logout-button {
+  width: 200px;
+  height: 40px;
+  background-color: white;
+  border: none;
+}
+.logout-button:hover {
+  background-color: #e2e2e2;
+  transition: 0.7s;
+  cursor: pointer;
+}

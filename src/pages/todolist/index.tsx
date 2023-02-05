@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
-import './App.css';
-import Signin from './pages/signin';
-import Signup from './pages/signup';
-import Todo from './pages/todo';
 import { useNavigate } from 'react-router-dom';
+import Todo from '../todo';
+import './todolist.css';
 
+const LOGOUT_TEXT = '로그아웃';
+const LOGOUT_MESSAGE = '로그아웃 되셨습니다.';
 const SIGNUP_LABEL = '회원가입';
 const SIGNIN_LABEL = '로그인';
-const TODO_LABEL = 'TODO';
 const SIGNUP_TEXT = 'signup';
 const SIGNIN_TEXT = 'signin';
 const TODO_TEXT = 'todo';
-const SIGNUP_INDEX = 0;
-const SIGNIN_INDEX = 1;
-const TODO_INDEX = 2;
 const ROUTE_SIGNIN = '/signin';
+const ROUTE_SIGNUP = '/signup';
 const ROUTE_TODO = '/todo';
-const CLICKED_TEXT = 'clicked';
+const ROUTE_HOME = '/';
 
-function App() {
-  const [currentTab, setCurrentTab] = useState(SIGNIN_INDEX);
+function TodoList() {
   const localStorage = window.localStorage;
   const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    localStorage.setItem('userInfo', '');
+    alert(LOGOUT_MESSAGE);
+    navigate(ROUTE_HOME);
+  };
 
   const checkLocalStorage = () => {
     const access_token = localStorage.getItem('userInfo');
@@ -30,6 +31,7 @@ function App() {
     }
     return false;
   };
+
   const onTabClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const name = e.currentTarget.name;
     if (name === SIGNUP_TEXT) {
@@ -37,7 +39,7 @@ function App() {
         navigate(ROUTE_TODO);
         return;
       }
-      setCurrentTab(SIGNUP_INDEX);
+      navigate(ROUTE_SIGNUP);
       return;
     }
     if (name === SIGNIN_TEXT) {
@@ -45,7 +47,7 @@ function App() {
         navigate(ROUTE_TODO);
         return;
       }
-      setCurrentTab(SIGNIN_INDEX);
+      navigate(ROUTE_SIGNIN);
       return;
     }
     if (name === TODO_TEXT) {
@@ -53,24 +55,29 @@ function App() {
         navigate(ROUTE_SIGNIN);
         return;
       }
-      setCurrentTab(TODO_INDEX);
+      navigate(ROUTE_TODO);
       return;
     }
   };
 
   return (
-    <div className="App">
-      <header className="App-header" />
-      <article>
-        <ul className="main-button-container">
+    <div className="todolist-layout">
+      <button
+        className="logout-button"
+        type="button"
+        onClick={handleLogoutClick}
+      >
+        {LOGOUT_TEXT}
+      </button>
+      <Todo />
+      <footer>
+        <ul className="home-button-container">
           <li>
             <button
               onClick={onTabClick}
               name={SIGNIN_TEXT}
               type="button"
-              className={`main-button ${
-                currentTab === SIGNIN_INDEX && CLICKED_TEXT
-              }`}
+              className="home-button"
             >
               {SIGNIN_LABEL}
             </button>
@@ -78,33 +85,17 @@ function App() {
           <li>
             <button
               onClick={onTabClick}
-              name={TODO_TEXT}
+              name={SIGNUP_TEXT}
               type="button"
-              className={`main-button ${
-                currentTab === TODO_INDEX && CLICKED_TEXT
-              }`}
+              className="home-button"
             >
-              {TODO_LABEL}
+              {SIGNUP_LABEL}
             </button>
           </li>
         </ul>
-        {currentTab === SIGNUP_INDEX && <Signup />}
-        {currentTab === SIGNIN_INDEX && <Signin />}
-        {currentTab === TODO_INDEX && <Todo />}
-
-        <button
-          onClick={onTabClick}
-          name={SIGNUP_TEXT}
-          type="button"
-          className={`main-button ${
-            currentTab === SIGNUP_INDEX && CLICKED_TEXT
-          }`}
-        >
-          {SIGNUP_LABEL}
-        </button>
-      </article>
+      </footer>
     </div>
   );
 }
 
-export default App;
+export default TodoList;

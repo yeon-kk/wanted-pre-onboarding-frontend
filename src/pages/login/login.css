@@ -1,0 +1,17 @@
+.login-layout-container {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  align-items: end;
+}
+
+.login-todo-button {
+  width: 400px;
+  height: 40px;
+  background-color: white;
+  border: none;
+}
+
+.login-todo-button:hover {
+  cursor: pointer;
+}

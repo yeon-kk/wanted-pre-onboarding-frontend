@@ -76,6 +76,21 @@ function Todo() {
     return;
   };
 
+  const deleteTodo = async (id: number) => {
+    try {
+      await fetch(`${TODOLIST_URL}/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('userInfo')}`,
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    return;
+  };
+
   const handleCreateTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCreateTodo(e.currentTarget.value);
   };
@@ -102,8 +117,10 @@ function Todo() {
 
   const handleDeleteClick = (index: number) => () => {
     const tmpList = [...todoList];
+    const id = tmpList[index].id;
     tmpList.splice(index, 1);
     setTodoList([...tmpList]);
+    deleteTodo(id);
   };
 
   const handleModifyClick = (todo: string, index: number) => () => {

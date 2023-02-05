@@ -5,6 +5,8 @@ const TODO_TITLE = 'TODO LIST';
 const ADD_LABEL = '추가';
 const MODIFY_LABEL = '수정';
 const DELETE_LABEL = '삭제';
+const SUBMIT_TEXT = '제출';
+const CANCEL_TEXT = '취소';
 
 interface todoType {
   todo: string;
@@ -105,14 +107,14 @@ function Todo() {
                     className="todo-button"
                     onClick={handleModifySbumitClick(index, modifyTodo)}
                   >
-                    제출
+                    {SUBMIT_TEXT}
                   </button>
                   <button
                     className="todo-button"
                     type="button"
                     onClick={handleCancleClick(index)}
                   >
-                    취소
+                    {CANCEL_TEXT}
                   </button>
                 </div>
               </label>
